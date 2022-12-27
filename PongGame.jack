@@ -1,0 +1,98 @@
+class PongGame {
+	
+    field PlatPong platpong;
+    field BoardPong board;
+	field BallPong ball;
+    field int score;
+    field int cycle;
+    field int speed;
+    constructor PongGame new() {
+        // initializtion
+        let score = 0;
+        let cycle = 0;
+        let speed = 50;
+        let board = BoardPong.new(this, 512, 264);
+        let platpong = PlatPong.new(this, 16, board.sizeY() / 2);
+		let ball = BallPong.new(this, board.sizeX() / 2 , board.sizeY() / 2);
+
+        do board.showScore();
+        return this;
+    }
+
+    method void dispose() {
+		// when we end the game, this function will be called to clean up all the memories
+        do platpong.dispose();
+        do board.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void run() {
+		// this function is where the main process happens
+		// var => declare a LOCAL cariable
+		// some of the vars here are old ones but i havent sort them out
+		
+        var boolean exit;
+        var int key;
+        let exit = false;
+        while(~exit) {
+            do board.showScore();
+            let key = Keyboard.keyPressed();
+            if( key = 131 ) {
+                // set dir to up
+				do platpong.setDir(1);
+            }
+            if( key = 133 ) {
+                // set dir to down
+                do platpong.setDir(2);
+            }
+
+
+            // update the position of both the plat and the ball
+            do platpong.move(cycle);
+			do ball.move(cycle);
+
+			// calling the ball's getStatus to determine if we should keep going
+			// if it return a FALSE, we know the ball hit the ground and so we start halting things
+            if( ~ ball.getStatus() ) {
+                do board.endGame();
+				do dispose();
+                return;
+            }
+			// if we are to go to next round, we update(display) the current score
+			// Sys.wait here make sure things dont go too fast
+			// the larger the speed var is, the slower the whole action goes
+            do board.showScore();
+            do Sys.wait(speed);
+            do nextCycle();
+            
+        }
+        do Sys.halt();
+        return;
+    }
+
+	method void addScore(){
+		let score = score +1;
+		return;
+	}
+
+    method int nextCycle() {
+        let cycle = cycle + 1;
+        return cycle;
+    }
+
+	// the following few function let us easily get variable from other program(classes)
+    method GlobalBoard getBoard() {
+        return board;
+    }
+	method BallPong getBall() {
+        return ball;
+    }
+
+    method int getCycle() {
+        return cycle;
+    }
+    method int getScore() {
+        return score;
+    }
+}

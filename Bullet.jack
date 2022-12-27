@@ -1,0 +1,104 @@
+class Bullet {
+    field int pos;
+    field boolean status;
+    //let status = true;
+
+    constructor Bullet new(int planepos) {
+        let status = false;
+        let pos = planepos + 1 - 160;
+        do draw(pos);
+        //do move(pos);
+        return this;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    //method void fire() { //fire the gun, bullet moves
+    //                                 //true means ready to fire
+        //let status = false;
+    //    do move(pos);
+    //   return;
+    //}
+
+    method void move() {
+        //var rndpos;
+        //let rndpos = (pos + 
+        //var int i;
+        //let pos = pos - 32;
+        //while (i < 200){  
+
+            do drawbackground(pos);
+            let pos = pos - 352;
+            do draw(pos);
+        //    let i = i + 1;
+        //}
+        //do bullet.dispose();
+        //let status = true;
+        //while (ststxus = false){
+          //  do drawblack(pos)
+        //}
+		//do Sys.wait(100);
+        return;
+    }
+    
+
+    method boolean GetStatus() {
+        return status;
+    }
+
+    method int GetPos() {
+        return pos;
+    }
+    //以下是draw
+    method void draw(int location) {
+        var int memAddress; 
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, -385);
+        do Memory.poke(memAddress +32, -961);
+        do Memory.poke(memAddress +64, -961);
+        do Memory.poke(memAddress +96, -17345);
+        do Memory.poke(memAddress +128, -961);
+        do Memory.poke(memAddress +160, -963);
+        do Memory.poke(memAddress +192, -961);
+        do Memory.poke(memAddress +224, -961);
+        do Memory.poke(memAddress +256, -9153);
+        do Memory.poke(memAddress +288, -385);
+        return;
+    }
+    method void drawblack(int location) {
+        var int memAddress; 
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, -1);
+        do Memory.poke(memAddress +32, -1);
+        do Memory.poke(memAddress +64, -1);
+        do Memory.poke(memAddress +96, -1);
+        do Memory.poke(memAddress +128, -1);
+        do Memory.poke(memAddress +160, -1);
+        do Memory.poke(memAddress +192, -1);
+        do Memory.poke(memAddress +224, -1);
+        do Memory.poke(memAddress +256, -1);
+        do Memory.poke(memAddress +288, -1);
+        return;
+    }
+    method void drawbackground(int location) {
+        var int memAddress; 
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, -1);
+        do Memory.poke(memAddress +32, -1);
+        do Memory.poke(memAddress +64, -17);
+        do Memory.poke(memAddress +96, -1);
+        do Memory.poke(memAddress +128, -1);
+        do Memory.poke(memAddress +160, -1);
+        do Memory.poke(memAddress +192, -1);
+        do Memory.poke(memAddress +224, -3073);
+        do Memory.poke(memAddress +256, -1);
+        do Memory.poke(memAddress +288, -1);
+        return;
+    }
+}

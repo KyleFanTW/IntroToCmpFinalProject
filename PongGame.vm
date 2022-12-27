@@ -1,0 +1,166 @@
+function PongGame.new 0
+push constant 6
+call Memory.alloc 1
+pop pointer 0
+push constant 0
+pop this 3
+push constant 0
+pop this 4
+push constant 50
+pop this 5
+push pointer 0
+push constant 512
+push constant 264
+call BoardPong.new 3
+pop this 1
+push pointer 0
+push constant 16
+push this 1
+call BoardPong.sizeY 1
+push constant 2
+call Math.divide 2
+call PlatPong.new 3
+pop this 0
+push pointer 0
+push this 1
+call BoardPong.sizeX 1
+push constant 2
+call Math.divide 2
+push this 1
+call BoardPong.sizeY 1
+push constant 2
+call Math.divide 2
+call BallPong.new 3
+pop this 2
+push this 1
+call BoardPong.showScore 1
+pop temp 0
+push pointer 0
+return
+function PongGame.dispose 0
+push argument 0
+pop pointer 0
+push this 0
+call PlatPong.dispose 1
+pop temp 0
+push this 1
+call BoardPong.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function PongGame.run 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+not
+not
+if-goto WHILE_END0
+push this 1
+call BoardPong.showScore 1
+pop temp 0
+call Keyboard.keyPressed 0
+pop local 1
+push local 1
+push constant 131
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 0
+push constant 1
+call PlatPong.setDir 2
+pop temp 0
+label IF_FALSE0
+push local 1
+push constant 133
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 0
+push constant 2
+call PlatPong.setDir 2
+pop temp 0
+label IF_FALSE1
+push this 0
+push this 4
+call PlatPong.move 2
+pop temp 0
+push this 2
+push this 4
+call BallPong.move 2
+pop temp 0
+push this 2
+call BallPong.getStatus 1
+not
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 1
+call BoardPong.endGame 1
+pop temp 0
+push pointer 0
+call PongGame.dispose 1
+pop temp 0
+push constant 0
+return
+label IF_FALSE2
+push this 1
+call BoardPong.showScore 1
+pop temp 0
+push this 5
+call Sys.wait 1
+pop temp 0
+push pointer 0
+call PongGame.nextCycle 1
+pop temp 0
+goto WHILE_EXP0
+label WHILE_END0
+call Sys.halt 0
+pop temp 0
+push constant 0
+return
+function PongGame.addScore 0
+push argument 0
+pop pointer 0
+push this 3
+push constant 1
+add
+pop this 3
+push constant 0
+return
+function PongGame.nextCycle 0
+push argument 0
+pop pointer 0
+push this 4
+push constant 1
+add
+pop this 4
+push this 4
+return
+function PongGame.getBoard 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function PongGame.getBall 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function PongGame.getCycle 0
+push argument 0
+pop pointer 0
+push this 4
+return
+function PongGame.getScore 0
+push argument 0
+pop pointer 0
+push this 3
+return

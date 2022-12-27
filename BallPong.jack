@@ -1,0 +1,95 @@
+class BallPong {
+    field PongGame game;
+    field int posX, posY;
+	field int dx, dy;
+	field boolean status;
+	field int newX, newY;
+	
+	constructor BallPong new(PongGame Agame, int Ax, int Ay) {
+		let status = true;
+		// status=did the ball die?
+		let game = Agame;
+		let posX = Ax;
+		let posY = Ay;
+		let dx = 1;
+		let dy = 1;
+
+		return this;
+	}
+	
+    method void move(int cycle) {
+		
+		var BoardPong board;
+		let status = true;
+		let newX = posX + dx;
+		let newY = posY + dy;
+        let board = game.getBoard();
+		if ( newX > (board.sizeX() - 4) ){
+			let dx = dx * -1;
+			do game.addScore();
+			do clearOld(cycle);
+			let newX = board.sizeX() / 2;
+			let newY = board.sizeY() / 2;
+		}
+		if ( newX < 4 ){
+			let dx = dx * -1;
+			let status = false;
+		}
+		if ( newY > (board.sizeY() - 4) ){
+			let dy = dy * -1;
+		}
+		if ( newY < 4 ){
+			let dy = dy * -1;
+		}
+		
+		if ( board.checkOccupied(newX, newY) ){
+			// handle bounce to object
+			let dx = dx * -1;
+			let newX = posX + dx;
+		}
+	
+        
+        
+		do drawNew(cycle);
+		do clearOld(cycle);
+        let posX = newX;
+		let posY = newY;
+		
+		let cycle = cycle + 1;
+		
+        return;
+    }
+	
+	method boolean getStatus(){
+		return status;
+	}
+	
+	method void drawNew(int cycle) {
+        var GlobalBoard board;
+        let board = game.getBoard();
+        do board.drawBallBit(newX, newY);
+
+        return;
+    }
+
+    method void clearOld(int cycle) {
+        var GlobalBoard board;
+        if (cycle > 0){
+			let board = game.getBoard();
+			do board.clearBallBit(posX, posY);
+		}
+        
+        return;
+    }
+	
+	method int getX(){
+		return posX;
+	}
+	method int getDir(){
+		return dx;
+	}
+	method int getY(){
+		return posY;
+	}
+	
+}

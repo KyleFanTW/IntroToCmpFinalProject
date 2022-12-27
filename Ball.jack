@@ -1,0 +1,102 @@
+class Ball {
+    field BrickGame game;
+    field int posX, posY;
+	field int dx, dy;
+	field boolean status;
+	field int newX, newY;
+	
+	constructor Ball new(BrickGame Agame, int Ax, int Ay) {
+		let status = true;
+		// status=did the ball die?
+		let game = Agame;
+		let posX = Ax;
+		let posY = Ay;
+		let dx = 1;
+		let dy = 1;
+
+		return this;
+	}
+	
+    method void move(int cycle) {
+		
+		var GlobalBoard board;
+		let status = true;
+		let newX = posX + dx;
+		let newY = posY + dy;
+        let board = game.getBoard();
+		if ( newX > (board.sizeX() - 4) ){
+			let dx = dx * -1;
+		}
+		if ( newX < 4 ){
+			let dx = dx * -1;
+		}
+		if ( newY > (board.sizeY() - 4) ){
+			let dy = dy * -1;
+			let status = false;
+		}
+		if ( newY < 4 ){
+			let dy = dy * -1;
+		}
+		
+		if ( board.checkOccupied(newX, newY) ){
+
+			if (newY < 56){
+				do clearBrick();
+				do game.plusScore();
+			}
+				// handle bounce to object
+				let dy = dy * -1;
+				let newY = posY + dy;	
+		}
+	
+        
+        do clearOld(cycle);
+        let posX = newX;
+		let posY = newY;
+		do drawNew(cycle);
+		let cycle = cycle + 1;
+		
+        return;
+    }
+	
+	method boolean getStatus(){
+		return status;
+	}
+	
+	method void drawNew(int cycle) {
+        var GlobalBoard board;
+        let board = game.getBoard();
+        do board.drawBallBit(posX, posY);
+
+        return;
+    }
+
+    method void clearOld(int cycle) {
+        var GlobalBoard board;
+		let board = game.getBoard();
+        if (cycle > 0){
+			
+			do board.clearBallBit(posX, posY);
+		}
+        
+        return;
+    }
+	method void clearBrick(){
+		var int i;
+		var int j;
+		var GlobalBoard board;
+		let board = game.getBoard();
+		let i=-3;
+		let j=-3;
+		while ( i<4){
+			let j=0;
+			while (j < 4){
+				do board.clearPlatBit(newX+i, newY+j);
+				let j = j+1;
+			}
+			let i = i + 1;
+		}
+		return;
+	}
+	
+}

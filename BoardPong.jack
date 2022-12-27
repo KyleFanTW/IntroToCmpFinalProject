@@ -1,0 +1,138 @@
+class BoardPong {
+    field PongGame game;
+    field int sizeX, sizeY;
+
+    field Array board;
+    constructor BoardPong new(PongGame Agame, int Ax, int Ay) {
+        let game = Agame;
+        let sizeX = Ax / 4;
+        let sizeY = (Ay-16) / 4;
+
+        do initBoard();
+        return this;
+    }
+	
+    method void dispose() {
+        var int curX;
+        var Array xBoard;
+        let curX = 0;
+        while( curX < sizeX ) {
+            let xBoard = board[curX];
+            do xBoard.dispose();
+            let curX = curX + 1;
+        }
+        do Memory.deAlloc(this);
+        return;
+    }
+
+   
+    method void initBoard() {
+        var int curX, curY;
+        var Array xBoard;
+
+        let board = Array.new(sizeX);
+        let curX = 0;
+
+        while( curX < sizeX ) {
+            let xBoard = Array.new(sizeY);
+            let curY = 0;
+            while( curY < sizeY ) {
+                let xBoard[curY] = false;
+                let curY = curY + 1;
+            }
+            let board[curX] = xBoard;
+            let curX = curX + 1;
+        }
+        return;
+    }
+
+    method int sizeX() {
+        return sizeX;
+    }
+    method int sizeY() {
+        return sizeY;
+    }
+
+
+    method void setOccupied(int x, int y, boolean occupied) {
+        var Array xBoard;
+        let xBoard = board[x];
+        let xBoard[y] = occupied;
+        return;
+    }
+    method boolean checkOccupied(int x, int y) {
+        var Array xBoard;
+		var Array xBoardLeft;
+		var Array xBoardRight;
+        let xBoard = board[x];
+		let xBoardLeft = board[x-2];
+		let xBoardRight = board[x+2];
+        if( xBoard[y] ) {
+            return true;
+        }
+		if (xBoard[y-2]){
+			return true;
+		}
+		if (xBoard[y+2]){
+			return true;
+		}
+		if (xBoardLeft[y]){
+			return true;
+		}
+		if (xBoardRight[y]){
+			return true;
+		}
+        else{
+			return false;
+        }
+    
+    }
+
+
+    method void drawPlatBit(int x, int y) {
+        do Screen.setColor(true);
+        do Screen.drawRectangle( x*4, y*4, (x*4)+4, (y*4)+4 );
+        do setOccupied(x, y, true);
+        return;
+    }
+    method void clearPlatBit(int x, int y) {
+        do Screen.setColor(false);
+        do Screen.drawRectangle( x*4, y*4, (x*4)+4, (y*4)+4 );
+        do setOccupied(x, y, false);
+        return;
+    }
+	method void drawBallBit(int x, int y) {
+        do Screen.setColor(true);
+        do Screen.drawCircle( x*4, y*4, 2);
+        do setOccupied(x, y, true);
+        return;
+    }
+    method void clearBallBit(int x, int y) {
+        do Screen.setColor(false);
+        do Screen.drawCircle( x*4, y*4, 2);
+        do setOccupied(x, y, false);
+        return;
+    }
+
+    method void showScore() {
+
+        var String tString;
+        do Output.moveCursor(0, 5);
+        let tString = "Score: ";
+        do Output.printString(tString);
+        do tString.dispose();
+        do Output.printInt(game.getScore());
+        return;
+    }
+  
+    method void endGame() {
+        var String tString;
+        do Output.moveCursor(0, 27);
+        let tString = "GAME OVER";
+        do Output.printString(tString);
+        do tString.dispose();
+		do Sys.wait(5000);
+		do Screen.clearScreen();
+        return;
+    }
+}

@@ -1,0 +1,38 @@
+class Star {
+
+    method void initstar() {
+        do drawstar(3187);
+        do drawstar(5329);
+        do drawstar(967);
+        do drawstar(6100);
+        return;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void drawstar(int location) {
+        var int memAddress; 
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, -257);
+        do Memory.poke(memAddress +32, -773);
+        do Memory.poke(memAddress +64, -9089);
+        do Memory.poke(memAddress +96, -1665);
+        do Memory.poke(memAddress +128, 2080);
+        do Memory.poke(memAddress +160, -24247);
+        do Memory.poke(memAddress +192, -15353);
+        do Memory.poke(memAddress +224, -3953);
+        do Memory.poke(memAddress +256, 26655);
+        do Memory.poke(memAddress +288, -5475);
+        do Memory.poke(memAddress +320, -8177);
+        do Memory.poke(memAddress +352, -15953);
+        do Memory.poke(memAddress +384, -11321);
+        do Memory.poke(memAddress +416, -12317);
+        do Memory.poke(memAddress +448, -8325);
+        do Memory.poke(memAddress +480, -1);
+        return;
+    }
+}

@@ -1,0 +1,392 @@
+function GlobalBoard.new 0
+push constant 4
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push argument 1
+push constant 4
+call Math.divide 2
+pop this 1
+push argument 2
+push constant 16
+sub
+push constant 4
+call Math.divide 2
+pop this 2
+push pointer 0
+call GlobalBoard.initBoard 1
+pop temp 0
+push pointer 0
+return
+function GlobalBoard.dispose 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 1
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 3
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+call Array.dispose 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function GlobalBoard.initBoard 3
+push argument 0
+pop pointer 0
+push this 1
+call Array.new 1
+pop this 3
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 1
+lt
+not
+if-goto WHILE_END0
+push this 2
+call Array.new 1
+pop local 2
+push constant 0
+pop local 1
+label WHILE_EXP1
+push local 1
+push this 2
+lt
+not
+if-goto WHILE_END1
+push local 1
+push local 2
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP1
+label WHILE_END1
+push local 0
+push this 3
+add
+push local 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function GlobalBoard.sizeX 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function GlobalBoard.sizeY 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function GlobalBoard.setOccupied 1
+push argument 0
+pop pointer 0
+push argument 1
+push this 3
+add
+pop pointer 1
+push that 0
+pop local 0
+push argument 2
+push local 0
+add
+push argument 3
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+return
+function GlobalBoard.checkOccupied 3
+push argument 0
+pop pointer 0
+push argument 1
+push this 3
+add
+pop pointer 1
+push that 0
+pop local 0
+push argument 1
+push constant 2
+sub
+push this 3
+add
+pop pointer 1
+push that 0
+pop local 1
+push argument 1
+push constant 2
+add
+push this 3
+add
+pop pointer 1
+push that 0
+pop local 2
+push argument 2
+push local 0
+add
+pop pointer 1
+push that 0
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+label IF_FALSE0
+push argument 2
+push local 1
+add
+pop pointer 1
+push that 0
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+not
+return
+label IF_FALSE1
+push argument 2
+push local 2
+add
+pop pointer 1
+push that 0
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 0
+not
+return
+goto IF_END2
+label IF_FALSE2
+push constant 0
+return
+label IF_END2
+function GlobalBoard.drawPlatBit 0
+push argument 0
+pop pointer 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push argument 1
+push constant 4
+call Math.multiply 2
+push argument 2
+push constant 4
+call Math.multiply 2
+push argument 1
+push constant 4
+call Math.multiply 2
+push constant 4
+add
+push argument 2
+push constant 4
+call Math.multiply 2
+push constant 4
+add
+call Screen.drawRectangle 4
+pop temp 0
+push pointer 0
+push argument 1
+push argument 2
+push constant 0
+not
+call GlobalBoard.setOccupied 4
+pop temp 0
+push constant 0
+return
+function GlobalBoard.clearPlatBit 0
+push argument 0
+pop pointer 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push argument 1
+push constant 4
+call Math.multiply 2
+push argument 2
+push constant 4
+call Math.multiply 2
+push argument 1
+push constant 4
+call Math.multiply 2
+push constant 4
+add
+push argument 2
+push constant 4
+call Math.multiply 2
+push constant 4
+add
+call Screen.drawRectangle 4
+pop temp 0
+push pointer 0
+push argument 1
+push argument 2
+push constant 0
+call GlobalBoard.setOccupied 4
+pop temp 0
+push constant 0
+return
+function GlobalBoard.drawBallBit 0
+push argument 0
+pop pointer 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push argument 1
+push constant 4
+call Math.multiply 2
+push argument 2
+push constant 4
+call Math.multiply 2
+push constant 2
+call Screen.drawCircle 3
+pop temp 0
+push pointer 0
+push argument 1
+push argument 2
+push constant 0
+not
+call GlobalBoard.setOccupied 4
+pop temp 0
+push constant 0
+return
+function GlobalBoard.clearBallBit 0
+push argument 0
+pop pointer 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push argument 1
+push constant 4
+call Math.multiply 2
+push argument 2
+push constant 4
+call Math.multiply 2
+push constant 2
+call Screen.drawCircle 3
+pop temp 0
+push pointer 0
+push argument 1
+push argument 2
+push constant 0
+call GlobalBoard.setOccupied 4
+pop temp 0
+push constant 0
+return
+function GlobalBoard.showScore 1
+push argument 0
+pop pointer 0
+push constant 0
+push constant 5
+call Output.moveCursor 2
+pop temp 0
+push constant 7
+call String.new 1
+push constant 83
+call String.appendChar 2
+push constant 99
+call String.appendChar 2
+push constant 111
+call String.appendChar 2
+push constant 114
+call String.appendChar 2
+push constant 101
+call String.appendChar 2
+push constant 58
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+pop local 0
+push local 0
+call Output.printString 1
+pop temp 0
+push local 0
+call String.dispose 1
+pop temp 0
+push this 0
+call BrickGame.getScore 1
+call Output.printInt 1
+pop temp 0
+push constant 0
+return
+function GlobalBoard.endGame 1
+push argument 0
+pop pointer 0
+push constant 0
+push constant 20
+call Output.moveCursor 2
+pop temp 0
+push constant 9
+call String.new 1
+push constant 71
+call String.appendChar 2
+push constant 65
+call String.appendChar 2
+push constant 77
+call String.appendChar 2
+push constant 69
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 79
+call String.appendChar 2
+push constant 86
+call String.appendChar 2
+push constant 69
+call String.appendChar 2
+push constant 82
+call String.appendChar 2
+pop local 0
+push local 0
+call Output.printString 1
+pop temp 0
+push local 0
+call String.dispose 1
+pop temp 0
+push constant 5000
+call Sys.wait 1
+pop temp 0
+call Screen.clearScreen 0
+pop temp 0
+push constant 0
+return

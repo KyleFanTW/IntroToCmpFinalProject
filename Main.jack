@@ -1,0 +1,55 @@
+  
+class Main {
+    function void main() {
+        var BrickGame brick;
+		var PongGame pong;
+        var GalaxianGame galaxy;
+		var int gametype;
+		var String tString;
+        
+		while (true){
+			do Output.moveCursor(0, 23);
+			let tString = "FINAL PROJECT";
+			do Output.printString(tString);
+			do tString.dispose();
+			
+			do Output.moveCursor(3, 26);
+			let tString = "1 for PONG";
+			do Output.printString(tString);
+			do tString.dispose();
+			do Output.moveCursor(4, 24);
+			let tString = "2 for BREAKOUT";
+			do Output.printString(tString);
+			do tString.dispose();
+			do Output.moveCursor(5, 24);
+			let tString = "3 for GALAXIAN";
+			do Output.printString(tString);
+			do tString.dispose();
+
+			do Output.moveCursor(7, 22);
+			let gametype = Keyboard.readInt("SELECT GAME 1 - 3:");
+			do Screen.clearScreen();
+			if ( gametype = 2){
+				let brick = BrickGame.new();
+				do brick.run();
+				}
+			if ( gametype = 1){
+				let pong = PongGame.new();
+				do pong.run();
+				}	
+			if ( gametype = 3){
+				let galaxy = GalaxianGame.new();
+				do galaxy.run();
+				}	
+			else{
+				do Screen.clearScreen();
+			}
+		}
+		do pong.dispose();
+	    do brick.dispose();
+        do galaxy.dispose();
+        return;
+    }
+
+}
+//this is the main program, i don't think its necessary to change anything for now

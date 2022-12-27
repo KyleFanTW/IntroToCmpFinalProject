@@ -1,0 +1,163 @@
+class GalaxianGame {
+    field GalaxBoard board;
+
+    field Moon moon;
+    field Star star;
+
+    field Start start;
+    field WIN win;
+
+    field Plane p1;
+    field BeeGroup beegroup;
+    field Bullet bullet;
+    
+    field int key;
+    field boolean exit;
+    field int sts, end;
+    field int planepos;
+    field int bulletpos;
+    field int times, totaltime;
+
+    constructor GalaxianGame new() {
+        let times = 0;
+        let totaltime = 0;
+		let exit = false;
+
+        do board.init();
+        do start.initStart();
+        do star.initstar();
+        do Sys.wait(2500);
+        do board.init();
+        do moon.initmoon();
+        do star.initstar();
+
+        let p1 = Plane.new();
+        let beegroup = BeeGroup.new();
+        //let moon = Moon.new();
+        let bullet = null;
+
+        return this;
+    }
+
+    method void dispose() {
+		// when we end the game, this function will be called to clean up all the memories
+        do board.dispose();
+        do moon.dispose();
+        do star.dispose();
+        do start.dispose();
+        do win.dispose();
+        do p1.dispose();
+        do beegroup.dispose();
+        do bullet.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void run() {
+		/*
+        var Plane p1;
+		var GalaxBoard board;
+        var BeeGroup beegroup;
+        var Bullet bullet;
+        var Moon moon;
+        var Star star;
+        var Start start;
+        var WIN win;
+        var int key;
+		var boolean exit;
+        var int sts, end;
+        var int planepos;
+        var int bulletpos;
+        var int times, totaltime;
+        
+        let times = 0;
+        let totaltime = 0;
+		let exit = false;
+        */
+
+        /*
+        do board.init();
+        do start.initStart();
+        do star.initstar();
+        do Sys.wait(2500);
+        do board.init();
+        do moon.initmoon();
+        do star.initstar();
+
+        let p1 = Plane.new();
+        let beegroup = BeeGroup.new();
+        //let moon = Moon.new();
+        let bullet = null;
+        */
+
+		//do p1.draw(500);
+		//do Output.printString("Hello World");
+		//do Output.println();
+		//let bullet = Bullet.new(6830);
+
+		while(~exit) {
+            //let bulletStatus = bullet.GetStatus();
+            //do board.showScore();
+            let key = Keyboard.keyPressed();
+            if( key = 130 ) {
+                // set dir to left
+                do p1.move(3);
+            }
+            if( key = 132 ) {
+                // set dir to right
+                do p1.move(4);
+            }
+            do beegroup.move();
+            if (key = 131) {
+                //do Output.printChar(key);                
+                let planepos = p1.GetPos();
+                //let planepos = 6831;
+                if (bullet = null) {
+                //let bullet_status = true;
+                //if ( bulletStatus = true) {
+                    // fire the gun
+                    let bullet = Bullet.new(planepos);
+                //d}
+                }
+            }
+            //let bulletpos = planepos - 160;
+            if (~(bullet = null)) {
+                //do board.init();
+                do moon.initmoon();
+                do star.initstar();
+                do bullet.move();
+                //let bulletpos = bulletpos - 32;
+                let bulletpos = bullet.GetPos();
+                //do beegroup.dead(bulletpos);
+                let sts = beegroup.dead(bulletpos);
+                let end = beegroup.endofgame();
+                if (end = 1) {
+                    let totaltime = totaltime + 1;
+                    if (times < 2) {
+                        do Sys.wait(500);
+                        let beegroup = BeeGroup.new();
+                        let times = times + 1;
+                    }
+                    if (totaltime = 3) {
+                        do win.initWIN();
+                        do Sys.wait(5000);
+		                do Screen.clearScreen();
+                        //do board.endGame();
+				        //do dispose();
+                    }
+                }
+                if (sts = 1) {
+                        let bullet = null;
+                }
+                if (bulletpos < 410) {
+                    do bullet.drawblack(bulletpos);
+                  //  do bullet.dispose();
+                    let bullet = null;
+                }
+            }
+			do Sys.wait(100);
+            
+		}
+		return;
+	}
+}

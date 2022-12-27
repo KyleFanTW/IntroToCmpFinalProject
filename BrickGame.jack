@@ -1,0 +1,131 @@
+class BrickGame {
+	// this is the actual main program for the BRICK game
+	
+	// field => declare a GLOBAL variable
+    field Platform platform;
+    field GlobalBoard board;
+	field Ball ball;
+    field int score;
+    field int cycle;
+    field int speed;
+    constructor BrickGame new() {
+        // initializtion
+        let score = 0;
+        let cycle = 0;
+        let speed = 50;
+        let board = GlobalBoard.new(this, 512, 264);
+        let platform = Platform.new(this, board.sizeX() / 2, 56);
+		let ball = Ball.new(this, board.sizeX() / 2 , board.sizeY() / 2);
+		do brickCreate();
+        do board.showScore();
+        return this;
+    }
+
+    method void dispose() {
+		// when we end the game, this function will be called to clean up all the memories
+        do platform.dispose();
+        do board.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void run() {
+		// this function is where the main process happens
+		// var => declare a LOCAL cariable
+		// some of the vars here are old ones but i havent sort them out
+		
+        var boolean broken;
+        var boolean exit;
+        var int key;
+        var int temp;
+        let exit = false;
+        while(~exit) {
+            do board.showScore();
+            let key = Keyboard.keyPressed();
+            if( key = 130 ) {
+                // set dir to left
+                do platform.setDir(3);
+            }
+            if( key = 132 ) {
+                // set dir to right
+                do platform.setDir(4);
+            }
+
+
+            // update the position of both the plat and the ball
+            do platform.move(cycle);
+			do ball.move(cycle);
+
+			// calling the ball's getStatus to determine if we should keep going
+			// if it return a FALSE, we know the ball hit the ground and so we start halting things
+            if( ~ ball.getStatus() ) {
+                do board.endGame();
+				do dispose();
+                return;
+            }
+			// if we are to go to next round, we update(display) the current score
+			// Sys.wait here make sure things dont go too fast
+			// the larger the speed var is, the slower the whole action goes
+            do board.showScore();
+            do Sys.wait(speed);
+            do nextCycle();
+            
+        }
+        do Sys.halt();
+        return;
+    }
+
+
+
+    method int nextCycle() {
+        let cycle = cycle + 1;
+        return cycle;
+    }
+
+	// the following few function let us easily get variable from other program(classes)
+    method GlobalBoard getBoard() {
+        return board;
+    }
+
+    method int getCycle() {
+        return cycle;
+    }
+    method int getScore() {
+        return score;
+    }
+	method void plusScore() {
+		let score = score + 1;
+        return;
+    }
+	
+	method void brickCreate(){
+		var int i;
+		var int j;
+		let i=0;
+		let j=0;
+		while ( i<16){
+			let j=0;
+			while (j < 3){
+				do newBrick((board.sizeX() / 2 - 54) + (7 * i), (board.sizeY() / 2 - 25) + (10 * j));
+				let j = j+1;
+			}
+			let i = i + 1;
+		}
+		return;
+	}
+	
+	method void newBrick(int brickX, int brickY){
+		var int i;
+		var int length;
+        let length = 2;
+		
+        let i = 0;
+        while( i < length ) {
+            let brickX = brickX + 1;
+            do board.drawPlatBit(brickX, brickY);
+            let i = i + 1;
+        }
+        return;
+	}
+	
+}

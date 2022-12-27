@@ -1,0 +1,199 @@
+class PlatPong {
+    field PongGame game;
+    field int posX, posY;
+	field int enemyX, enemyY;
+	field int enemyLast;
+    field int length;
+    // 0=none,1=up,2=down,3=left,4=right
+    field int playDir, enemyDir;
+
+    constructor PlatPong new(PongGame Agame, int Ax, int Ay) {
+        var int i;
+		
+        let game = Agame;
+        let posX = Ax;
+        let posY = Ay - 15-1;
+		let enemyX = 128 - posX;
+		let enemyY = posY;
+		let enemyLast = 0;
+        let length = 15;
+        let playDir = 2;
+		let enemyDir = 0;
+        let i = 0;
+        while( i < length ) {
+            let posY = posY + 1;
+			let enemyY = posY;
+            do drawHead(posX, posY);
+			do drawHead(enemyX, enemyY);
+            let i = i + 1;
+            do game.nextCycle();
+        }
+        return this;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    
+
+    method void setDir(int newdir) {
+		if (playDir = 1){
+			if (newdir = 2){
+				//change the head to the new direction's head
+				let posY = posY + length -1;
+			}
+		}
+		if (playDir = 2){
+			if (newdir = 1){
+				let posY = posY - length +1;
+			}
+		}
+        let playDir = newdir;
+        return;
+    }
+
+
+
+    method void move(int cycle) {
+        var GlobalBoard board;
+		var BallPong ball;
+		var int delay;
+        let board = game.getBoard();
+		
+        let ball = game.getBall();
+
+        
+        do movePlayer();
+		
+		if (ball.getX() > ((board.sizeX()*2) / 5) ){
+			if (ball.getDir() >0 ){
+				
+				if ( (game.getCycle()*9) & 4 =0){
+					if ( ball.getY() > enemyY ){
+						let enemyDir = 2;
+					}
+					else{
+						if ( ball.getY() < enemyY ){
+							let enemyDir = 1;
+						}
+						else{
+							let enemyDir = 0;
+						}
+					}
+				}
+				if (enemyDir>0){
+					do setEnemy();
+					do moveEnemy();
+				}
+			}
+		}
+        return;
+    }
+	
+	method void setEnemy(){
+		if (enemyLast = 1){
+			if (enemyDir = 2){
+				//change the head to the new direction's head
+				let enemyY = enemyY + length -1;
+			}
+		}
+		if (enemyLast = 2){
+			if (enemyDir = 1){
+				let enemyY = enemyY - length +1;
+			}
+		}
+        let enemyLast = enemyDir;
+        return;
+	}
+	
+	method void movePlayer(){
+		var GlobalBoard board;
+        let board = game.getBoard();
+		if( playDir = 1 ) {
+            // up
+            if( posY = 0 ) {
+                let playDir = 2;
+				let posY = posY + length -1;
+				//change the head pos
+            }
+            else {
+                let posY = posY - 1;
+            }
+        }
+        if( playDir = 2 ) {
+            // down
+            if( posY = (board.sizeY() - 2) ) {
+                let playDir = 1;
+				let posY = posY - length;
+            }
+            else {
+                let posY = posY + 1;
+            }
+        }
+		do drawHead(posX, posY);
+        do clearTail(posX, posY, playDir);
+		return;
+	}
+	
+	method void moveEnemy(){
+		var GlobalBoard board;
+        let board = game.getBoard();
+		if( enemyDir = 1 ) {
+            // up
+			if( enemyY > 1 ) {
+				let enemyY = enemyY - 1;
+			}
+        }
+        if( enemyDir = 2 ) {
+            // down
+			if( enemyY < (board.sizeY() - 2) ) {
+				let enemyY = enemyY + 1;
+            }
+        }
+		do drawHead(enemyX, enemyY);
+        do clearTail(enemyX, enemyY, enemyDir);
+		return;
+	}
+
+
+    method void drawHead(int drawX, int drawY) {
+        var GlobalBoard board;
+        let board = game.getBoard();
+        do board.drawPlatBit(drawX, drawY);
+        
+        return;
+    }
+
+    method void clearTail(int headX, int headY, int dir) {
+        var GlobalBoard board;
+        var int tailX, tailY;
+		if ( dir = 2){
+			let tailY = headY - length;
+			}
+		if ( dir = 1){
+			let tailY = headY + length;
+			}	
+		let tailX = headX;
+        let board = game.getBoard();
+        do board.clearPlatBit(tailX, tailY);
+        return;
+    }
+
+    method int posX() {
+        return posX;
+    }
+    method int posY() {
+        return posY;
+    }
+    method int getLength() {
+        return length;
+    }
+    method int getDir() {
+        return playDir;
+    }
+
+
+
+}
